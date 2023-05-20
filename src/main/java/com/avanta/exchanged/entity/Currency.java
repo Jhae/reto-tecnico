@@ -4,23 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "currency")
+@Document(collection = "currency")
 public class Currency {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
-
-    @Column(length = 50, nullable = false)
     private String name;
-
-    @OneToOne(fetch = FetchType.EAGER) @JoinColumn(name = "id_country")
+    @DBRef(lazy = false)
     private Country country;
 }

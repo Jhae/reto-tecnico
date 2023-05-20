@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,32 +14,18 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "exchange_history",uniqueConstraints = {@UniqueConstraint(columnNames = {"id_origin_currency","id_destiny_currency"})})
+@Document(collection = "exchange_history")
 public class ExchangeHistory {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
-
-    @Column(precision = 10,scale = 2)
     private BigDecimal originAmount;
-
-    @Column(precision = 10,scale = 2)
     private BigDecimal destinyAmount;
-
-    @Column(precision = 10,scale = 2)
     private BigDecimal exchangeRate;
-
     private Date operationDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_destiny_currency",referencedColumnName = "id")
+    @DBRef(lazy = false)
     private Currency destinyCurrency;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_origin_currency",referencedColumnName = "id")
+    @DBRef(lazy = false)
     private Currency originCurrency;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user",referencedColumnName = "id")
+    @DBRef(lazy = false)
     private User user;
 }

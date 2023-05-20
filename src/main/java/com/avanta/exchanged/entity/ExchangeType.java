@@ -4,27 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "exchange_type")
+@Document(collection = "exchange_type")
 public class ExchangeType {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     private Long id;
-//    private Long idOriginCurrency;
-//    private Long idDestinyCurrency;
     private BigDecimal rate;
-
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "id_origin_currency")
+    @DBRef(lazy = false)
     private Currency originCurrency;
-
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "id_destiny_currency")
+    @DBRef(lazy = false)
     private Currency destinyCurrency;
 
 }

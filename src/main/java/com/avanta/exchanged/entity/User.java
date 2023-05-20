@@ -4,31 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "user")
+@Document(collection = "user")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     Long id;
-    @Column(length = 50,nullable = false)
     String username;
-    @Column(length = 50,nullable = false)
     String password;
-    @Column(length = 100,nullable = false)
     String email;
-    @Column(length = 50,nullable = false)
     String name;
-    @Column(length = 50,nullable = false)
     String lastName;
-//    @Column(precision = 10,scale = 2)
-//    BigDecimal money;
-
     Boolean enabled;
 }

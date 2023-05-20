@@ -1,18 +1,15 @@
 package com.avanta.exchanged.entity;
 
 import lombok.*;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "country")
+@Document(collection = "country")
 public class Country {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
-    @Column(length = 50, nullable = false)
     private String name;
 }
