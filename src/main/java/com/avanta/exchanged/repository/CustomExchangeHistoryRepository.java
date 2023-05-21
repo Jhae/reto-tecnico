@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository @RequiredArgsConstructor
-public class CustomExchangeHistory {
+public class CustomExchangeHistoryRepository {
     private final ReactiveMongoTemplate mongoTemplate;
 
     Flux<ExchangeHistory> finAllWithCurrenciesAndWithUser(){
