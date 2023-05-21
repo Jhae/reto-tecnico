@@ -1,19 +1,13 @@
-package com.avanta.exchanged.response;
+package com.avanta.exchanged.dto;
 
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter @Setter
 public class UserDto {
 
-    Long id;
+    String id;
     String username;
     String password;
     String email;

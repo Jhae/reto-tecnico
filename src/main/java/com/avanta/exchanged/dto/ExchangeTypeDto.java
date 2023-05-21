@@ -1,6 +1,5 @@
-package com.avanta.exchanged.response;
+package com.avanta.exchanged.dto;
 
-import com.avanta.exchanged.entity.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @Data
 public class ExchangeTypeDto {
-    private Long id;
+    private String id;
     private BigDecimal rate;
     private CurrencyDto originCurrency;
     private CurrencyDto destinyCurrency;

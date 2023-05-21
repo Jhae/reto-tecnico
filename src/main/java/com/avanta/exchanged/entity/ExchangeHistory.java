@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,15 +19,12 @@ import java.util.Date;
 @Document(collection = "exchange_history")
 public class ExchangeHistory {
     @Id
-    private Long id;
+    private String id;
     private BigDecimal originAmount;
     private BigDecimal destinyAmount;
     private BigDecimal exchangeRate;
     private Date operationDate;
-    @DBRef(lazy = false)
     private Currency destinyCurrency;
-    @DBRef(lazy = false)
     private Currency originCurrency;
-    @DBRef(lazy = false)
     private User user;
 }
