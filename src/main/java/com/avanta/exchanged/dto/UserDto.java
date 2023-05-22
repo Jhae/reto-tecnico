@@ -9,10 +9,9 @@ public class UserDto {
 
     String id;
     String username;
-    String password;
+
     String email;
     String name;
     String lastName;
     Boolean enabled;
-
 }
