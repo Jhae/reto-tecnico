@@ -11,16 +11,10 @@ public class ExchangeTypeDtoMapper implements Converter<ExchangeType, ExchangeTy
     public ExchangeTypeDto convert(ExchangeType source) {
         ExchangeTypeDto exchangeTypeDto = ExchangeTypeDto.builder()
                 .id(source.getId())
+                .originCurrency(source.getOriginCurrency())
+                .destinyCurrency(source.getDestinyCurrency())
                 .rate(source.getRate())
                 .build();
-        if(source.getOriginCurrency() != null){
-            CurrencyDto originCurrencyDto = new CurrencyDtoMapper().convert(source.getOriginCurrency());
-            exchangeTypeDto.setOriginCurrency(originCurrencyDto);
-        }
-        if(source.getDestinyCurrency() != null){
-            CurrencyDto destinyCurrencyDto = new CurrencyDtoMapper().convert(source.getDestinyCurrency());
-            exchangeTypeDto.setDestinyCurrency(destinyCurrencyDto);
-        }
         return exchangeTypeDto;
     }
 
