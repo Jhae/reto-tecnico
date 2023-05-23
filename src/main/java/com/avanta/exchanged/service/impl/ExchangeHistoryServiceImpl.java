@@ -19,6 +19,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
     private final ExchangeHistoryRepository exchangeHistoryRepository;
+    private final ExchangeTypeRepository exchangeTypeRepository;
     private final CustomExchangeTypeRepository customExchangeTypeRepository;
 
 
@@ -26,17 +27,11 @@ public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
     public Mono<ExchangeHistoryDto> doExchange(DoExchangeRequest requestBody) {
 
         // Verificacion existencia de tipo de cambio
-        return customExchangeTypeRepository.findByIdWithCurrencies(requestBody.getExchangeId())
-                .filter(
-                        exchangeType -> {
-                            return requestBody.getExchangeId().equals(exchangeType.getId());
-                        }
-                )
-                .next()
+        return exchangeTypeRepository.findById(requestBody.getExchangeId())
                 .switchIfEmpty(Mono.error(new Exception("No se encontro el tipo de cambio a usar")))
-                .flatMap(exchangeType -> {
-                    // Verficacion de moendas de tipo de cambio
-                    if(null == exchangeType.getDestinyCurrency() || null == exchangeType.getDestinyCurrency())
+                .flatMap(exchangeTypeNtt -> {
+                    // Verficacion de tasa de cambio
+                    if(null == exchangeTypeNtt.getRate())
                     {
                         return Mono.error(new Exception("Mondas del camnio no disponibles"));
                     }
@@ -45,13 +40,13 @@ public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
                             .originAmount(requestBody.getOriginAmount())
                             .destinyAmount(
                                     BigDecimal.ZERO.add(
-                                            exchangeType.getRate().multiply(requestBody.getOriginAmount())
+                                            exchangeTypeNtt.getRate().multiply(requestBody.getOriginAmount())
                                         )
                             )
-                            .exchangeRate(exchangeType.getRate())
+                            .exchangeRate(exchangeTypeNtt.getRate())
                             .operationDate(new Date())
-                            .originCurrency(exchangeType.getOriginCurrency())
-                            .destinyCurrency(exchangeType.getDestinyCurrency())
+                            .originCurrency(exchangeTypeNtt.getOriginCurrency())
+                            .destinyCurrency(exchangeTypeNtt.getDestinyCurrency())
                             .build();
                     return exchangeHistoryRepository.save(exchangeHistoryNtt);
                 })
