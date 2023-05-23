@@ -1,6 +1,7 @@
 package com.avanta.exchanged.handler;
 
 import com.avanta.exchanged.dto.ExchangeTypeDto;;
+import com.avanta.exchanged.response.GetAllExchangeTypesResponse;
 import com.avanta.exchanged.service.ExchangeTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class ExchangeTypeHandler {
     private final ExchangeTypeService exchangeTypeService;
 
     public Mono<ServerResponse> getAllExchangeTypes(ServerRequest request){
-        Flux<ExchangeTypeDto> body = exchangeTypeService.loadAllExchangeTypes();
+        Flux<GetAllExchangeTypesResponse> body = exchangeTypeService.loadAllExchangeTypes();
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(body, ExchangeTypeDto.class)

@@ -11,20 +11,12 @@ public class ExchangeHistoryDtoMapper implements Converter<ExchangeHistory, Exch
     public ExchangeHistoryDto convert(ExchangeHistory source) {
         ExchangeHistoryDto converted = ExchangeHistoryDto.builder()
                 .id(source.getId())
+                .originCurrency(source.getOriginCurrency())
                 .originAmount(source.getOriginAmount())
                 .destinyAmount(source.getDestinyAmount())
                 .exchangeRate(source.getExchangeRate())
                 .operationDate(source.getOperationDate())
                 .build();
-
-        if (source.getOriginCurrency() != null) {
-            CurrencyDto originCurrencyDto = new CurrencyDtoMapper().convert(source.getOriginCurrency());
-            converted.setOriginCurrency(originCurrencyDto);
-        }
-        if (source.getDestinyCurrency() != null) {
-            CurrencyDto destinyCurrencyDto = new CurrencyDtoMapper().convert(source.getDestinyCurrency());
-            converted.setDestinyCurrency(destinyCurrencyDto);
-        }
         return converted;
     }
 }

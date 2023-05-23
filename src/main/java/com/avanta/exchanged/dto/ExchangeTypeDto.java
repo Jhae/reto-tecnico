@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class ExchangeTypeDto {
     private String id;
     private BigDecimal rate;
-    private CurrencyDto originCurrency;
-    private CurrencyDto destinyCurrency;
+    private String originCurrency;
+    private String destinyCurrency;
 }

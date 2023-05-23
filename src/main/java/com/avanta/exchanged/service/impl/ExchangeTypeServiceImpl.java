@@ -6,8 +6,11 @@ import com.avanta.exchanged.repository.CustomExchangeTypeRepository;
 import com.avanta.exchanged.repository.ExchangeTypeRepository;
 import com.avanta.exchanged.dto.ExchangeTypeDto;
 import com.avanta.exchanged.dto.converter.ExchangeTypeDtoMapper;
+import com.avanta.exchanged.response.GetAllExchangeTypesResponse;
+import com.avanta.exchanged.response.converter.GetAllExchangeTypesConverter;
 import com.avanta.exchanged.service.ExchangeTypeService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,11 +23,11 @@ public class ExchangeTypeServiceImpl implements ExchangeTypeService {
     private final ExchangeTypeRepository exchangeTypeRepository;
 
     @Override
-    public Flux<ExchangeTypeDto> loadAllExchangeTypes() {
+    public Flux<GetAllExchangeTypesResponse> loadAllExchangeTypes() {
         return customExchangeTypeRepository.findAllWithCurrencyWithCuontries()
                 .flatMap(
-                        exchangeTypeNtt -> {
-                            return Mono.just(new ExchangeTypeDtoMapper().convert(exchangeTypeNtt));
+                        getAllExchangeTypesNtt -> {
+                            return Mono.just(new GetAllExchangeTypesConverter().convert(getAllExchangeTypesNtt));
                         }
                 );
     }
@@ -32,16 +35,8 @@ public class ExchangeTypeServiceImpl implements ExchangeTypeService {
     @Override
     public Mono<ExchangeTypeDto> saveExchangetype(ExchangeTypeDto exchangeTypeDto) {
         ExchangeType exchangeTypeNtt = ExchangeType.builder()
-                .originCurrency(
-                        Currency.builder()
-                                .id(exchangeTypeDto.getOriginCurrency().getId())
-                                .build()
-                )
-                .destinyCurrency(
-                        Currency.builder()
-                                .id(exchangeTypeDto.getDestinyCurrency().getId())
-                                .build()
-                )
+                .originCurrency(exchangeTypeDto.getOriginCurrency())
+                .destinyCurrency(exchangeTypeDto.getDestinyCurrency())
                 .rate(exchangeTypeDto.getRate())
                 .build();
         return exchangeTypeRepository.save(exchangeTypeNtt)

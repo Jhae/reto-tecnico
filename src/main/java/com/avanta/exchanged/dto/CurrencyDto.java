@@ -3,6 +3,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.util.List;
 
@@ -13,5 +16,5 @@ import java.util.List;
 public class CurrencyDto {
     private String id;
     private String name;
-    private List<CountryDto> countries;
+    private List<String> countries;
 }

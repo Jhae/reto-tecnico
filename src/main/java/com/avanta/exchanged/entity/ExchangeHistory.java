@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,7 +24,10 @@ public class ExchangeHistory {
     private BigDecimal destinyAmount;
     private BigDecimal exchangeRate;
     private Date operationDate;
-    private Currency destinyCurrency;
-    private Currency originCurrency;
-    private User user;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String destinyCurrency;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String originCurrency;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String user;
 }
