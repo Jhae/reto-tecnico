@@ -1,5 +1,6 @@
 package com.avanta.exchanged.service.impl;
 
+import com.avanta.exchanged.bean.AppUser;
 import com.avanta.exchanged.dto.ExchangeHistoryDto;
 import com.avanta.exchanged.dto.converter.ExchangeHistoryDtoMapper;
 import com.avanta.exchanged.dto.converter.ExchangeTypeDtoMapper;
@@ -8,6 +9,7 @@ import com.avanta.exchanged.entity.ExchangeHistory;
 import com.avanta.exchanged.repository.*;
 import com.avanta.exchanged.request.DoExchangeRequest;
 import com.avanta.exchanged.service.ExchangeHistoryService;
+import com.avanta.exchanged.util.PrincipalExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -48,7 +50,14 @@ public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
                             .originCurrency(exchangeTypeNtt.getOriginCurrency())
                             .destinyCurrency(exchangeTypeNtt.getDestinyCurrency())
                             .build();
-                    return exchangeHistoryRepository.save(exchangeHistoryNtt);
+
+                    return PrincipalExtractor.extractPrincipal(AppUser.class)
+                                .flatMap(
+                                        principal -> {
+                                            exchangeHistoryNtt.setUser(principal.getUserNtt().getId());
+                                            return exchangeHistoryRepository.save(exchangeHistoryNtt);
+                                        }
+                                );
                 })
                 .switchIfEmpty(Mono.error(new Exception("Error al hacer el cambio")))
                 .flatMap(

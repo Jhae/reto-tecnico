@@ -17,6 +17,7 @@ public class ExchangeHistoryHandler {
     private final ExchangeHistoryService exchangeHistoryService;
 
     public Mono<ServerResponse> doExchange(ServerRequest request){
+
         return request.bodyToMono(DoExchangeRequest.class)
                 .flatMap(
                         DoExchangeRequest -> {

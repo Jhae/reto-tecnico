@@ -11,14 +11,16 @@ import reactor.core.publisher.Flux;
 public class CustomExchangeHistoryRepository {
     private final ReactiveMongoTemplate mongoTemplate;
 
-    Flux<ExchangeHistory> finAllWithCurrenciesAndWithUser(){
+    public Flux<ExchangeHistory> finAllWithCurrenciesAndWithUser(){
         Aggregation aggregations = Aggregation.newAggregation(
                 Aggregation.lookup("currency","originCurrency","_id","originCurrency"),
                 Aggregation.unwind("$originCurrency"),
                 Aggregation.lookup("currency","destinyCurrency","_id","destinyCurrency"),
                 Aggregation.unwind("$destinyCurrency"),
                 Aggregation.lookup("country","originCurrency.countries","_id","originCurrency.countries"),
-                Aggregation.lookup("country","destinyCurrency.countries","_id","destinyCurrency.countries")
+                Aggregation.lookup("country","destinyCurrency.countries","_id","destinyCurrency.countries"),
+                Aggregation.lookup("user","user","_id","user"),
+                Aggregation.unwind("$user")
         );
         return mongoTemplate.aggregate(aggregations, "exchange_history", ExchangeHistory.class);
     }

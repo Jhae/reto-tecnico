@@ -15,23 +15,9 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 @Service @RequiredArgsConstructor @Slf4j
-public class UserDetailServiceImpl implements ReactiveUserDetailsService {
+public class UserDetailsServiceImpl implements ReactiveUserDetailsService {
 
     private final UserRepository userRepository;
-
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        AppUser appUser = null;
-        try {
-//            User userNtt = userRepository.findByUsername(username).get();
-            appUser = AppUser.builder()
-                            .userNtt(null)
-                            .build();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return appUser;
-    }
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
