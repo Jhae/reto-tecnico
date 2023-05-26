@@ -24,6 +24,7 @@ public class AppConfig {
                 .PUT("/svc/exchangeTypes/{id}",exchangeTypeHandler::updateExchangeType)
                 .DELETE("/svc/exchangeTypes/{id}",exchangeTypeHandler::deleteExchangeType)
 
+                .GET("/svc/exchangeHistory",exchangeHistoryHandler::getAllExchangesHistory)
                 .POST("/svc/doExchange",exchangeHistoryHandler::doExchange)
 
                 .build();

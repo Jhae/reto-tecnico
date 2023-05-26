@@ -3,27 +3,28 @@ package com.avanta.exchanged.service.impl;
 import com.avanta.exchanged.bean.AppUser;
 import com.avanta.exchanged.dto.ExchangeHistoryDto;
 import com.avanta.exchanged.dto.converter.ExchangeHistoryDtoMapper;
-import com.avanta.exchanged.dto.converter.ExchangeTypeDtoMapper;
-import com.avanta.exchanged.entity.Currency;
 import com.avanta.exchanged.entity.ExchangeHistory;
 import com.avanta.exchanged.repository.*;
 import com.avanta.exchanged.request.DoExchangeRequest;
+import com.avanta.exchanged.response.GetExchangeHistoryResponse;
+import com.avanta.exchanged.response.converter.GetAllExchangeHistoryConverter;
 import com.avanta.exchanged.service.ExchangeHistoryService;
 import com.avanta.exchanged.util.PrincipalExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
-    private final ExchangeHistoryRepository exchangeHistoryRepository;
-    private final ExchangeTypeRepository exchangeTypeRepository;
-    private final CustomExchangeTypeRepository customExchangeTypeRepository;
 
+    private final ExchangeTypeRepository exchangeTypeRepository;
+
+    private final ExchangeHistoryRepository exchangeHistoryRepository;
+    private final CustomExchangeHistoryRepository customExchangeHistoryRepository;
 
     @Override
     public Mono<ExchangeHistoryDto> doExchange(DoExchangeRequest requestBody) {
@@ -67,4 +68,12 @@ public class ExchangeHistoryServiceImpl implements ExchangeHistoryService {
                 );
 
     }
+
+    @Override
+    public Flux<GetExchangeHistoryResponse> loadExchangesHistoryWithCurrencyAndUser() {
+        return customExchangeHistoryRepository.finAllWithCurrenciesAndWithUser()
+                .flatMap(exchangeHistoryNtt -> Flux.just(new GetAllExchangeHistoryConverter().convert(exchangeHistoryNtt)));
+    }
+
+
 }

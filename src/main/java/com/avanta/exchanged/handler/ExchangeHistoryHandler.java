@@ -2,13 +2,17 @@ package com.avanta.exchanged.handler;
 
 import com.avanta.exchanged.dto.ExchangeHistoryDto;
 import com.avanta.exchanged.request.DoExchangeRequest;
+import com.avanta.exchanged.response.GetAllExchangeTypesResponse;
+import com.avanta.exchanged.response.GetExchangeHistoryResponse;
 import com.avanta.exchanged.service.ExchangeHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -38,4 +42,12 @@ public class ExchangeHistoryHandler {
                 );
     }
 
+    public Mono<ServerResponse> getAllExchangesHistory(ServerRequest request)
+    {
+        Flux<GetExchangeHistoryResponse> responseBody = exchangeHistoryService.loadExchangesHistoryWithCurrencyAndUser();
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(responseBody, GetAllExchangeTypesResponse.class)
+                .onErrorContinue((error, o) -> log.error(error.getMessage(), error));
+    }
 }

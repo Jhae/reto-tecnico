@@ -1,6 +1,7 @@
 package com.avanta.exchanged.repository;
 
 import com.avanta.exchanged.entity.ExchangeHistory;
+import com.avanta.exchanged.entity.aux.GetExchangesHistoryNtt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -11,7 +12,7 @@ import reactor.core.publisher.Flux;
 public class CustomExchangeHistoryRepository {
     private final ReactiveMongoTemplate mongoTemplate;
 
-    public Flux<ExchangeHistory> finAllWithCurrenciesAndWithUser(){
+    public Flux<GetExchangesHistoryNtt> finAllWithCurrenciesAndWithUser(){
         Aggregation aggregations = Aggregation.newAggregation(
                 Aggregation.lookup("currency","originCurrency","_id","originCurrency"),
                 Aggregation.unwind("$originCurrency"),
@@ -22,6 +23,7 @@ public class CustomExchangeHistoryRepository {
                 Aggregation.lookup("user","user","_id","user"),
                 Aggregation.unwind("$user")
         );
-        return mongoTemplate.aggregate(aggregations, "exchange_history", ExchangeHistory.class);
+        return mongoTemplate.aggregate(aggregations, "exchange_history", GetExchangesHistoryNtt.class);
     }
+
 }

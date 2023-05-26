@@ -27,7 +27,7 @@ public class ExchangeTypeServiceImpl implements ExchangeTypeService {
         return customExchangeTypeRepository.findAllWithCurrencyWithCuontries()
                 .flatMap(
                         getAllExchangeTypesNtt -> {
-                            return Mono.just(new GetAllExchangeTypesConverter().convert(getAllExchangeTypesNtt));
+                            return Flux.just(new GetAllExchangeTypesConverter().convert(getAllExchangeTypesNtt));
                         }
                 );
     }

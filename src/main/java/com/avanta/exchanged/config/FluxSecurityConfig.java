@@ -34,6 +34,7 @@ public class FluxSecurityConfig {
                 .pathMatchers(HttpMethod.PUT, "/svc/exchangeTypes/**").hasRole(AppRoleEnum.USER.name())
                 .pathMatchers(HttpMethod.DELETE, "/svc/exchangeTypes/**").hasRole(AppRoleEnum.USER.name())
 
+                .pathMatchers(HttpMethod.GET, "/svc/exchangeHistory").hasRole(AppRoleEnum.ADMIN.name())
                 .pathMatchers(HttpMethod.POST, "/svc/doExchange").hasRole(AppRoleEnum.USER.name())
 
                 .anyExchange().authenticated()
