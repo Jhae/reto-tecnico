@@ -28,8 +28,10 @@ public class FluxSecurityConfig {
 
         return httpSecurity.csrf().disable()
                 .authorizeExchange().pathMatchers("/svc/auth").permitAll()
+                
+                .pathMatchers(HttpMethod.GET,"/svc/currency").permitAll()
 
-                .pathMatchers(HttpMethod.GET,"/svc/exchangeTypes").hasRole(AppRoleEnum.USER.name())
+                .pathMatchers(HttpMethod.GET,"/svc/exchangeTypes").permitAll()
                 .pathMatchers(HttpMethod.POST, "/svc/exchangeTypes").hasRole(AppRoleEnum.USER.name())
                 .pathMatchers(HttpMethod.PUT, "/svc/exchangeTypes/**").hasRole(AppRoleEnum.USER.name())
                 .pathMatchers(HttpMethod.DELETE, "/svc/exchangeTypes/**").hasRole(AppRoleEnum.USER.name())

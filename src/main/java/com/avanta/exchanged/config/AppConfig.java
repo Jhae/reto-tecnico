@@ -1,6 +1,7 @@
 package com.avanta.exchanged.config;
 
 import com.avanta.exchanged.handler.AuthHandler;
+import com.avanta.exchanged.handler.CurrencyHandler;
 import com.avanta.exchanged.handler.ExchangeHistoryHandler;
 import com.avanta.exchanged.handler.ExchangeTypeHandler;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +16,12 @@ public class AppConfig {
     @Bean
     RouterFunction<ServerResponse> router(ExchangeTypeHandler exchangeTypeHandler
                                         ,ExchangeHistoryHandler exchangeHistoryHandler
-                                        ,AuthHandler authHandler){
+                                        ,AuthHandler authHandler
+                                        ,CurrencyHandler currencyHandler){
         return RouterFunctions.route()
                 .POST("/svc/auth",authHandler::authenticate)
+
+                .GET("/svc/currency",currencyHandler::getCurrenciesWithCountry)
 
                 .GET("/svc/exchangeTypes",exchangeTypeHandler::getAllExchangeTypes)
                 .POST("/svc/exchangeTypes",exchangeTypeHandler::saveExchangeType)
