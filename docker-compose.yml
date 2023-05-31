@@ -2,36 +2,37 @@ version: '3.1'
 
 services:
   mongo:
-    image: mongo
+    image: mongo:5
+    container_name: mongo_pose
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mgpassd
     ports:
       - 27017:27017
     volumes:
       - /home/jharev/data/:/data/db
     networks:
-    - mongo-network
-      
-
-  mongo-express:
-    image: mongo-express
-    restart: always
+    - exchange-net
+  exchanged_pose:
+    container_name: exchanged_pose
+    image: exchanged:v1
+    environment:
+      APP_CONFIG_MONGODB_HOST: mongo_pose
+      APP_CONFIG_MONGODB_DB: exchangedb
+      APP_CONFIG_MONGODB_PORT: 27017
+      APP_CONFIG_MONGODB_USER: mongouser
+      APP_CONFIG_MONGODB_PSSWD: mgpassd
+      APP_CONFIG_CORS_ALLOWED_ORIGIN_PATTERNS: "http://host.docker.internal:4200"
     ports:
-      - 8081:8081
+      - 8010:8010
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - exchange-net
     depends_on:
       - mongo
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
-    links:
-      - mongo
-    networks:
-      - mongo-network
-      
 networks:
-  mongo-network:
-    driver: bridge
+  exchange-net:
+
       
