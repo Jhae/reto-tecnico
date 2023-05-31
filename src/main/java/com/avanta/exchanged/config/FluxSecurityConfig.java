@@ -6,11 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -22,13 +26,19 @@ public class FluxSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     SecurityWebFilterChain filterChain(ServerHttpSecurity httpSecurity,SecurityContextRepository securityConextRepsository,
                                         ReactiveAuthenticationManager authenticationManager){
 
-        return httpSecurity.csrf().disable()
-                .authorizeExchange().pathMatchers("/svc/auth").permitAll()
-                
+        return httpSecurity
+                .cors(Customizer.withDefaults())
+                .csrf().disable()
+                .authorizeExchange()
+                .pathMatchers(HttpMethod.OPTIONS).permitAll()
+
+                .pathMatchers(HttpMethod.POST,"/svc/auth").permitAll()
+
                 .pathMatchers(HttpMethod.GET,"/svc/currency").permitAll()
 
                 .pathMatchers(HttpMethod.GET,"/svc/exchangeTypes").permitAll()
